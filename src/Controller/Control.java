@@ -17,15 +17,17 @@ public class Control {
 	
 	 
 	
-   public void connect() throws ClassNotFoundException, SQLException
+   public Connection connect() throws ClassNotFoundException, SQLException
 	{
 		Class.forName("com.mysql.cj.jdbc.Driver");
 		Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/mypract123","root","abc123");
+		return con;
 	}
+   
 	public void add() throws ClassNotFoundException, SQLException
 	{
-		Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/mypract123","root","abc123");
-	   
+		//Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/mypract123","root","abc123");
+	   Connection con = connect();
 		
 		System.out.println("Enter id:");
 		int id=Integer.parseInt(s.nextLine());
@@ -52,8 +54,7 @@ public class Control {
 	
 	public void show() throws ClassNotFoundException, SQLException
 	{
-		Class.forName("com.mysql.cj.jdbc.Driver");
-		Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/mypract123","root","abc123");
+		Connection con = connect();
 	    
 		ResultSet rs=null;
 		PreparedStatement st=con.prepareStatement(" select *from mypract123.pract");
@@ -68,15 +69,15 @@ public class Control {
 	
 	public void search() throws ClassNotFoundException, SQLException
 	{    System.out.println("Enter name:");
-	String name=s.nextLine();
-		Class.forName("com.mysql.cj.jdbc.Driver");
-		Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/mypract123","root","abc123");
+	     String name=s.nextLine();
+	     Connection con = connect();
 		ResultSet rs=null;
 		PreparedStatement st=con.prepareStatement(" select *from mypract123.pract where name like '"+name+"%'");
 	   // st.setString(1, name);
 		rs=st.executeQuery();
+		System.out.println("  Id Name Address  ");
 		while(rs.next())
-		{   System.out.println("  Id Name Address  ");
+		{   
 			System.out.println("  "+rs.getInt(1)+"  "+rs.getString(2)+"  "+rs.getString(3));
 		}
 	
@@ -90,8 +91,7 @@ public class Control {
 	String name=s.nextLine();
 	System.out.println("Enter address:");
 	String address=s.nextLine();
-		Class.forName("com.mysql.cj.jdbc.Driver");
-		Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/mypract123","root","abc123");
+	Connection con = connect();
 		PreparedStatement st=con.prepareStatement("update mypract123.pract set name=? , address=? where id=? ");
 	    st.setString(1, name);
 	    st.setString(2, address);
@@ -110,8 +110,7 @@ public class Control {
 	public void delete() throws ClassNotFoundException, SQLException
 	{   System.out.println("Enter id:");
 	    int id=Integer.parseInt(s.nextLine());
-		Class.forName("com.mysql.cj.jdbc.Driver");
-		Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/mypract123","root","abc123");
+	    Connection con = connect();
 		PreparedStatement st=con.prepareStatement("delete from mypract123.pract where id=?");
 		st.setInt(1, id);
 		int c=st.executeUpdate();
